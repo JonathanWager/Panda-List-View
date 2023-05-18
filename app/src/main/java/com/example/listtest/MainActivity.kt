@@ -11,6 +11,8 @@ import android.widget.NumberPicker
 class MainActivity : AppCompatActivity() {
 
     private lateinit var notesList: MutableList<String>
+    private lateinit var textSizeList: MutableList<Float>
+    private lateinit var textColorList: MutableList<Int>
     private lateinit var notesListView: ListView
     private lateinit var notesAdapter: ArrayAdapter<String>
     private lateinit var notesInput: EditText
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         notesList = mutableListOf()
+        textSizeList = mutableListOf()
+        textColorList = mutableListOf()
         notesListView = findViewById(R.id.notes_list)
         notesInput = findViewById(R.id.notes_input)
         saveButton  = findViewById(R.id.save_button)
@@ -45,8 +49,10 @@ class MainActivity : AppCompatActivity() {
                 val view = super.getView(position, convertView, parent)
                 val titleTextView = view.findViewById<TextView>(R.id.text1)
 
-                val textSize = sizePicker.value.toFloat()
+                val textSize = textSizeList[position]
+                val textColor = textColorList[position]
                 titleTextView.textSize = textSize
+                titleTextView.setTextColor(textColor)
 
                 return view
             }
@@ -57,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         notesListView.setOnItemLongClickListener { _, _, position, _ ->
             notesAdapter.remove(notesAdapter.getItem(position))
+            textSizeList.removeAt(position)
+            textColorList.removeAt(position)
             true
         }
 
@@ -64,6 +72,10 @@ class MainActivity : AppCompatActivity() {
             val newNoteCard = titleInput.text.toString() + "\n\n " + notesInput.text.toString()
             if (newNoteCard.isNotEmpty()) {
                 notesList.add(newNoteCard)
+                val textSize = sizePicker.value.toFloat()
+                val textColor = titleInput.currentTextColor
+                textSizeList.add(textSize)
+                textColorList.add(textColor)
                 notesAdapter.notifyDataSetChanged()
                 titleInput.text.clear()
                 notesInput.text.clear()
