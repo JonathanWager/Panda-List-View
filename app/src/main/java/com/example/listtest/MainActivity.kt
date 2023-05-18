@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notesInput: EditText
     private lateinit var titleInput: EditText
     private lateinit var saveButton: Button
-    private lateinit var imageButton: ImageButton
+    private lateinit var imageButton: ImageView
     private lateinit var sizePicker: NumberPicker
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
         notesInput = findViewById(R.id.notes_input)
         saveButton  = findViewById(R.id.save_button)
         titleInput = findViewById(R.id.titles_input)
-        imageButton = findViewById(R.id.imageButton2)
+        imageButton = findViewById(R.id.img_set_textsize)
         sizePicker = findViewById(R.id.numberPicker)
 
-        sizePicker.minValue = 12
+        sizePicker.minValue = 16
         sizePicker.maxValue = 30
         sizePicker.wrapSelectorWheel = false
 
@@ -42,12 +42,12 @@ class MainActivity : AppCompatActivity() {
         notesAdapter = object : ArrayAdapter<String>(
             this,
             R.layout.list_item,
-            R.id.text1,
+            R.id.item_text_note,
             notesList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                val titleTextView = view.findViewById<TextView>(R.id.text1)
+                val titleTextView = view.findViewById<TextView>(R.id.item_text_note)
 
                 val textSize = textSizeList[position]
                 val textColor = textColorList[position]
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            val newNoteCard = titleInput.text.toString() + "\n\n " + notesInput.text.toString()
+            val newNoteCard = titleInput.text.toString() + "\n" + notesInput.text.toString()
             if (newNoteCard.isNotEmpty()) {
                 notesList.add(newNoteCard)
                 val textSize = sizePicker.value.toFloat()
